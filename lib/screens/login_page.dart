@@ -4,7 +4,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -13,11 +13,46 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  bool _passwordVisible = false;
+
   @override
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  // Función para validar usuario
+  String? _validateUsername(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, ingresa un nombre de usuario';
+    }
+    if (value.length < 4) {
+      return 'El nombre de usuario debe tener al menos 4 caracteres';
+    }
+    return null;
+  }
+
+  // Función para validar contraseña
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, ingresa una contraseña';
+    }
+    if (value.length < 6) {
+      return 'La contraseña debe tener al menos 6 caracteres';
+    }
+    return null;
+  }
+
+  // Función para enviar el formulario
+  void _submitForm() {
+    if (_loginFormKey.currentState!.validate()) {
+      // Si el formulario es válido, realiza la acción de login
+      print('Formulario válido');
+      // Aquí puedes agregar la lógica de autenticación
+    } else {
+      print('Formulario no válido');
+    }
   }
 
   @override
@@ -103,13 +138,8 @@ class _LoginPageState extends State<LoginPage> {
                       color: Color(0xFF9faed6),
                     ),
                   ),
-                  controller: _usernameController, /////// Cambiarrrrr
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingresa un usuario';
-                    }
-                    return null;
-                  }, /////// Cambiarrrrr
+                  controller: _usernameController,
+                  validator: _validateUsername,
                 ),
                 const SizedBox(height: 16),
                 Container(
@@ -125,19 +155,28 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextFormField(
                   textAlign: TextAlign.left,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(
                       Icons.lock_sharp,
                       color: Color(0xFF9faed6),
                     ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        // Cambia el icono dependiendo de si la contraseña está visible o no
+                        _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        // Cambiar el estado para mostrar/ocultar la contraseña
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
+                      color: const Color(0xFF9faed6),
+                    ),
                   ),
-                  controller: _passwordController, /////// Cambiarrrrr
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingresa su contraseña';
-                    }
-                    return null;
-                  }, /////// Cambiarrrrr
+                  controller: _passwordController, 
+                  validator: _validatePassword,
+                  obscureText: !_passwordVisible,
                 ),
                 const SizedBox(height: 16),
                 Container(
@@ -157,20 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 50,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (_loginFormKey.currentState!.validate()) {
-                      // Aquí va la lógica para autenticar al usuario
-                    }
-                  },
-                  // style: ElevatedButton.styleFrom(
-                  //   backgroundColor: const Color(0xFF383ea5), // Color de fondo del botón
-                  //   foregroundColor: Colors.white,      // Color del texto del botón
-                  //   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16), // Tamaño del padding interno
-                  //   textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w100, letterSpacing: BorderSide.strokeAlignInside), // Estilo del texto
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(20), // Bordes redondeados
-                  //   ),
-                  // ),
+                  onPressed: _submitForm,
                   child: const Text('INICIAR SESIÓN'),
                 ),
               ],
