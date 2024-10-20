@@ -4,8 +4,7 @@ class RecoverAccountPage extends StatelessWidget {
   RecoverAccountPage({super.key});
 
   final _loginFormKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +38,22 @@ class RecoverAccountPage extends StatelessWidget {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'BIENVENIDO!',
+                    'Recuperar Cuenta',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
+                const SizedBox(height: 5,),
+                Text(
+                  'Para recuperar su contraseña, escriba el correo con el que se registró para enviarle un mail de recuperación.',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
                 const SizedBox(
-                  height: 46,
+                  height: 36,
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Usuario:',
+                    'Correo:',
                     style: Theme.of(context).textTheme.labelLarge,
                     textAlign: TextAlign.left,
                   ),
@@ -61,66 +65,26 @@ class RecoverAccountPage extends StatelessWidget {
                   textAlign: TextAlign.left,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(
-                      Icons.account_circle_outlined,
+                      Icons.mail_outline_outlined,
                       color: Color(0xFF9faed6),
                     ),
                   ),
-                  controller: _usernameController, /////// Cambiarrrrr
+                  controller: _emailController, /////// Cambiarrrrr
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, ingresa un usuario';
+                      return 'Por favor, ingresa un correo';
                     }
                     return null;
                   }, /////// Cambiarrrrr
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Contraseña:',
-                    style: Theme.of(context).textTheme.labelLarge,
-                    textAlign: TextAlign.left,
-                  ),
-                ),
                 const SizedBox(
-                  height: 3,
-                ),
-                TextFormField(
-                  textAlign: TextAlign.left,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.lock_sharp,
-                      color: Color(0xFF9faed6),
-                    ),
-                  ),
-                  controller: _passwordController, /////// Cambiarrrrr
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingresa su contraseña';
-                    }
-                    return null;
-                  }, /////// Cambiarrrrr
-                ),
-                const SizedBox(height: 16),
-                Container(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/new_password');
-                      },
-                      child: Text(
-                        '¿Olvidaste tu contraseña?',
-                        style: Theme.of(context).textTheme.labelSmall,
-                        textAlign: TextAlign.right,
-                      ),
-                    )),
-                const SizedBox(
-                  height: 50,
+                  height: 100,
                 ),
                 ElevatedButton(
                   onPressed: () {
                     if (_loginFormKey.currentState!.validate()) {
-                      // Aquí va la lógica para autenticar al usuario
+                      Navigator.pushNamed(context, '/recover_code');
+                      // Aquí va la lógica para autenticar al usuarios
                     }
                   },
                   // style: ElevatedButton.styleFrom(
@@ -132,7 +96,7 @@ class RecoverAccountPage extends StatelessWidget {
                   //     borderRadius: BorderRadius.circular(20), // Bordes redondeados
                   //   ),
                   // ),
-                  child: const Text('INICIAR SESIÓN'),
+                  child: const Text('ENVIAR'),
                 ),
               ],
             )),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class NewPasswordPage extends StatelessWidget {
-  NewPasswordPage({super.key});
+class RecoverCodePage extends StatelessWidget {
+  RecoverCodePage({super.key});
 
-  final _recoverFormKey = GlobalKey<FormState>();
-  final _newPasswordController = TextEditingController();
+  final _loginFormKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +31,20 @@ class NewPasswordPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-            key: _recoverFormKey,
+            key: _loginFormKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Nueva Contraseña',
+                    'Ingrese el código',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
-                const SizedBox(height: 5,),
+                const SizedBox(
+                  height: 5,
+                ),
                 Text(
                   'Para recuperar su contraseña, escriba el código de seis dígitos que se te envió por correo.',
                   style: Theme.of(context).textTheme.bodyMedium,
@@ -53,7 +55,7 @@ class NewPasswordPage extends StatelessWidget {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Nueva Contraseña:',
+                    'Código de Recuperación:',
                     style: Theme.of(context).textTheme.labelLarge,
                     textAlign: TextAlign.left,
                   ),
@@ -65,52 +67,42 @@ class NewPasswordPage extends StatelessWidget {
                   textAlign: TextAlign.left,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(
-                      Icons.lock_sharp,
+                      Icons.numbers_outlined,
                       color: Color(0xFF9faed6),
                     ),
                   ),
-                  controller: _newPasswordController, /////// Cambiarrrrr
+                  controller: _emailController, /////// Cambiarrrrr
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, ingresa un usuario';
+                      return 'Por favor, ingresa un correo';
                     }
                     return null;
                   }, /////// Cambiarrrrr
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(
+                  height: 10,
+                ),
                 Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Confirmar su Contraseña:',
-                    style: Theme.of(context).textTheme.labelLarge,
-                    textAlign: TextAlign.left,
-                  ),
+                    alignment: Alignment.centerLeft, 
+                    child: GestureDetector(
+                      onTap: () {
+                        // reenvio de codigo
+                      },
+                      child: Text(
+                        'Reenviar código',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.right, 
+                      ),
+                    )
                 ),
                 const SizedBox(
-                  height: 3,
+                  height: 50,
                 ),
-                TextFormField(
-                  textAlign: TextAlign.left,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.lock_sharp,
-                      color: Color(0xFF9faed6),
-                    ),
-                  ),
-                  controller: _newPasswordController, /////// Cambiarrrrr
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingresa su contraseña';
-                    }
-                    return null;
-                  }, /////// Cambiarrrrr
-                ),
-                const SizedBox(height: 66),
                 ElevatedButton(
                   onPressed: () {
-                    if (_recoverFormKey.currentState!.validate()) {
-                      // Aquí va la lógica para autenticar al usuario
-                      Navigator.pushNamed(context, '/');
+                    if (_loginFormKey.currentState!.validate()) {
+                      Navigator.pushNamed(context, '/new_password');
+                      // Aquí va la lógica para autenticar al usuarios
                     }
                   },
                   // style: ElevatedButton.styleFrom(
@@ -122,7 +114,7 @@ class NewPasswordPage extends StatelessWidget {
                   //     borderRadius: BorderRadius.circular(20), // Bordes redondeados
                   //   ),
                   // ),
-                  child: const Text('INICIAR SESIÓN'),
+                  child: const Text('ENVIAR'),
                 ),
               ],
             )),

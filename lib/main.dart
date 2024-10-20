@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'screens/recover_code_page.dart';
+import 'screens/recover_account_page.dart';
 import 'screens/new_password_page.dart';
 import 'screens/login_page.dart';
 
@@ -8,7 +10,8 @@ void main() => runApp(MaterialApp(
   initialRoute: '/',
   routes: {
     '/':(context) => LoginPage(),
-    '/recover_account':(context) => LoginPage(),
+    '/recover_account':(context) => RecoverAccountPage(),
+    '/recover_code': (context) => RecoverCodePage(),
     '/new_password': (context) => NewPasswordPage(),
   },
 
@@ -40,6 +43,9 @@ void main() => runApp(MaterialApp(
       headlineSmall: TextStyle(
         color: Color(0xFF18599d), 
         fontWeight: FontWeight.w500,
+      ),
+      bodyMedium: TextStyle(
+        color: Color(0xFF9ab4d1),
       )
     ),
 
