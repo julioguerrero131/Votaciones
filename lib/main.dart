@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/profile.dart';
 import 'screens/recover_code_page.dart';
 import 'screens/recover_account_page.dart';
 import 'screens/new_password_page.dart';
@@ -13,6 +14,7 @@ void main() => runApp(MaterialApp(
     '/recover_account':(context) => RecoverAccountPage(),
     '/recover_code': (context) => RecoverCodePage(),
     '/new_password': (context) => NewPasswordPage(),
+    '/profile': (context) => UserProfileScreen(),
   },
 
   theme: ThemeData(

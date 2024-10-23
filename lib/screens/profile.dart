@@ -3,8 +3,10 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class UserProfileScreen extends StatefulWidget {
+  const UserProfileScreen({super.key});
+
   @override
-  _UserProfileScreenState createState() => _UserProfileScreenState();
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
@@ -29,44 +31,44 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil'),
+        title: const Text('Perfil'),
         centerTitle: true,
-        leading: Icon(Icons.notifications_none),
-        actions: [
+        leading: const Icon(Icons.notifications_none),
+        actions: const [
           Icon(Icons.refresh),
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             CircleAvatar(
               radius: 50,
               backgroundColor: Colors.grey.shade800,
-              child: Icon(
+              child: const Icon(
                 Icons.person,
                 size: 50,
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Juanito Pérez',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
+            const Text(
               'Cargo',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildTextField(label: 'Cédula', initialValue: '0909090909'),
             _buildTextField(label: 'Nombres', initialValue: 'Andrés Santiago'),
             _buildTextField(label: 'Apellidos', initialValue: 'Pérez Sánchez'),
@@ -92,7 +94,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         initialValue: initialValue,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
       ),
     );
@@ -114,7 +116,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         },
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
       ),
     );
@@ -126,7 +128,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: DropdownButtonFormField<String>(
         value: selectedGender,
-        items: [
+        items: const [
           DropdownMenuItem(value: 'Masculino', child: Text('Masculino')),
           DropdownMenuItem(value: 'Femenino', child: Text('Femenino')),
           DropdownMenuItem(
@@ -137,7 +139,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             selectedGender = value!;
           });
         },
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           labelText: 'Género',
           border: OutlineInputBorder(),
         ),
@@ -153,20 +155,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           file != null
               ? ListTile(
-                  leading: Icon(Icons.image),
+                  leading: const Icon(Icons.image),
                   title: Text(file.path.split('/').last),
                   subtitle: Text('${file.lengthSync() / 1024} KB'),
-                  trailing: Icon(Icons.check_circle, color: Colors.green),
+                  trailing: const Icon(Icons.check_circle, color: Colors.green),
                 )
               : TextButton.icon(
                   onPressed: () => _pickImage(isDocument: isDocument),
-                  icon: Icon(Icons.camera_alt),
-                  label: Text('Tomar una foto'),
+                  icon: const Icon(Icons.camera_alt),
+                  label: const Text('Tomar una foto'),
                 ),
         ],
       ),
