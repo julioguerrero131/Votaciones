@@ -4,17 +4,19 @@ import 'screens/recover_code_page.dart';
 import 'screens/recover_account_page.dart';
 import 'screens/new_password_page.dart';
 import 'screens/login_page.dart';
+import 'screens/report_page.dart';
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
 
-  initialRoute: '/',
+  initialRoute: '/report',
   routes: {
-    '/':(context) => LoginPage(),
+    '/':(context) => const LoginPage(),
     '/recover_account':(context) => RecoverAccountPage(),
     '/recover_code': (context) => RecoverCodePage(),
     '/new_password': (context) => NewPasswordPage(),
-    '/profile': (context) => UserProfileScreen(),
+    '/profile': (context) => const UserProfileScreen(),
+    '/report': (context) => ReportPage(),
   },
 
   theme: ThemeData(
@@ -48,7 +50,10 @@ void main() => runApp(MaterialApp(
       ),
       bodyMedium: TextStyle(
         color: Color(0xFF9ab4d1),
-      )
+      ),
+      bodySmall: TextStyle(
+        color: Color(0xFF9ab4d1),
+      ),
     ),
 
     scaffoldBackgroundColor: Colors.white,
