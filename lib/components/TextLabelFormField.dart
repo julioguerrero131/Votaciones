@@ -4,12 +4,14 @@ class TextLabelFormField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final String? Function(String?)? validator;
+  final bool isReadOnly;
 
   const TextLabelFormField({
     super.key,
     required this.controller,
     this.label = 'Texto:',
     this.validator,
+    this.isReadOnly = false, 
   });
 
   @override
@@ -32,6 +34,7 @@ class TextLabelFormField extends StatelessWidget {
             textAlign: TextAlign.left,
             controller: controller,
             validator: validator,
+            readOnly: isReadOnly,
           ),
         ),
         const SizedBox(height: 16),

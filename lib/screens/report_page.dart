@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:votaciones_movil/components/NumericFormField.dart';
 import 'package:votaciones_movil/components/DropDownFormField.dart';
 import 'package:votaciones_movil/components/TextLabelFormField.dart';
+import 'package:votaciones_movil/components/showAlertDialog.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
@@ -18,7 +19,8 @@ class _ReportPageState extends State<ReportPage> {
   final _numberBlankVotesController = TextEditingController();
   final _numberNullVotesController = TextEditingController();
 
-  List<String> items = ['Item 1', 'Item 2', 'Item 3'];
+  List<String> items = ['Candidato 1', 'Candidato 2', 'Candidato 3'];
+
   List<TextEditingController> controllersFirstField = [];
   List<TextEditingController> controllersSecondField = [];
 
@@ -27,23 +29,94 @@ class _ReportPageState extends State<ReportPage> {
   bool _isSecretaryChecked = false;
   bool _isDelegatedChecked = false;
 
+  int _submitCheckboxAttempt = 0;
+  int _submitNumericAttempt = 0;
+  int _submitTotalAttempt = 0;
+
   // Función para enviar el formulario
   void _submitForm() {
     if (_reportKey.currentState!.validate()) {
-      // Si el formulario es válido, realiza la acción de login
-      print('Formulario válido');
-      // Aquí puedes agregar la lógica de autenticación
+      // Obtén los valores ingresados en los campos de texto
+      int totalVotes = int.tryParse(_numberTotalVotesController.text) ?? 0;
+      int validVotes = int.tryParse(_numberValidVotesController.text) ?? 0;
+      int blankVotes = int.tryParse(_numberBlankVotesController.text) ?? 0;
+      int nullVotes = int.tryParse(_numberNullVotesController.text) ?? 0;
+
+      // Calcula la suma de votos válidos, blancos y nulos
+      int sumVotes = validVotes + blankVotes + nullVotes;
+
+      // Calcula la suma de los votos ingresados en los campos de texto
+      int candidatesVotes = controllersSecondField.fold(0, (sum, controller) {
+        int value = int.tryParse(controller.text) ?? 0;
+        return sum + value;
+      });
+
+      // Validar que la suma coincida con el total
+      if (totalVotes != sumVotes) {
+        if (_submitTotalAttempt == 0) {
+          showAlertDialog(
+          context: context,
+          title: 'Error',
+          message: 'La suma de Válidos, Blancos y Nulos no coincide con Totales.',
+        );
+        _submitTotalAttempt++;
+        return; // No enviamos el formulario si no coinciden
+        }
+        
+      }
+
+      // Validar el rango de la suma de los votos
+      if (candidatesVotes < 0 || candidatesVotes != validVotes) {
+        if (_submitNumericAttempt == 0) {
+          showAlertDialog(
+            context: context,
+            title: 'Advertencia',
+            message:
+                'La cantidad de Votos Válidos no coincide con la suma de los Votos de cada Candidatos.',
+          );
+          _submitNumericAttempt++;
+          return; // No enviamos el formulario en el primer intento
+        }
+      }
     } else {
-      print('Formulario no válido');
+      showAlertDialog(
+        context: context,
+        title: 'Error: Formulario No Válido',
+        message: 'Por favor, completa todos los campos correctamente.',
+      );
+      return;
     }
+
+    // Verificar si al menos un checkbox está marcado
+    if (!_isPresidentChecked && !_isSecretaryChecked && !_isDelegatedChecked) {
+      // Si es el primer intento sin checkbox, mostrar advertencia
+      if (_submitCheckboxAttempt == 0) {
+        showAlertDialog(
+          context: context,
+          title: 'Advertencia',
+          message: 'Debe marcar al menos un checkbox antes de enviar.',
+        );
+        _submitCheckboxAttempt++;
+        return; // No enviamos el formulario en el primer intento
+      }
+    }
+
+    showAlertDialog(
+      context: context,
+      title: 'Correcto',
+      message: 'Los datos son correctos. La suma de los votos es válida.',
+    );
+    // Aquí puedes agregar la lógica de envío de datos
+    _submitNumericAttempt = 0;
+    _submitCheckboxAttempt = 0;
   }
 
   @override
   void initState() {
     super.initState();
     // Inicializamos dos controladores para cada elemento en la lista
-    controllersFirstField =
-        List.generate(items.length, (index) => TextEditingController());
+    controllersFirstField = List.generate(
+        items.length, (index) => TextEditingController(text: items[index]));
     controllersSecondField =
         List.generate(items.length, (index) => TextEditingController());
   }
@@ -194,6 +267,7 @@ class _ReportPageState extends State<ReportPage> {
                               }
                               return null;
                             },
+                            isReadOnly: true,
                           ),
                         ),
                         const SizedBox(width: 16),

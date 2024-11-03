@@ -89,6 +89,20 @@ void main() => runApp(MaterialApp(
         ),
       ),
     ),
+    checkboxTheme: CheckboxThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(90.0),
+      ),
+      fillColor: WidgetStateProperty.resolveWith<Color?>(
+        (Set<WidgetState> states) {
+          if (states.contains(WidgetState.selected)) {
+            return const Color(0xFFf43195); // color cuando está seleccionado
+          }
+          return null; // color por defecto cuando no está seleccionado
+        },
+      ),
+      checkColor: WidgetStateProperty.all(Colors.white), // color del check
+    ),
   ),
 ));
 
