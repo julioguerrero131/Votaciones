@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:votaciones_movil/components/DropDownFormField.dart';
+import 'package:votaciones_movil/components/NumericFormField.dart';
 import 'dart:io';
+
+import 'package:votaciones_movil/components/TextLabelFormField.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -13,6 +17,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   File? _documentFile;
   File? _delegateCardFile;
   final ImagePicker _picker = ImagePicker();
+
+  final _idNumberController = TextEditingController(text: '0909090909');
+  final _namesController = TextEditingController(text: 'Andrés Santiago');
+  final _lastNamesController = TextEditingController(text: 'Pérez Sánchez');
+  String? _genderSelectedOption = 'Masculino';
+  final _homeAddressController = TextEditingController(text: 'Av. Quito 324');
+  String? _citySelectedOption = 'Guayaquil';
+  String? _precinctSelectedOption = 'Vicente Rocafuerte';
+  final _firstNumberController = TextEditingController(text: '0909090909');
+  final _auxiliarNumberController = TextEditingController(text: '0909090902');
+
 
   Future<void> _pickImage({required bool isDocument}) async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
@@ -60,16 +75,114 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            _buildTextField(label: 'Cédula', initialValue: '0909090909'),
-            _buildTextField(label: 'Nombres', initialValue: 'Andrés Santiago'),
-            _buildTextField(label: 'Apellidos', initialValue: 'Pérez Sánchez'),
-            _buildGenderDropdown(),
-            _buildTextField(
-                label: 'Dirección domicilio', initialValue: 'Av. Quito 324'),
-            _buildDropdownField(label: 'Ciudad', options: ['Guayaquil', 'Quito', 'Cuenca']),
-            _buildDropdownField(label: 'Recinto', options: ['Vicente Rocafuerte', 'Otro']),
-            _buildTextField(label: 'Teléfono principal', initialValue: '0909090909'),
-            _buildTextField(label: 'Teléfono auxiliar', initialValue: '0909090902'),
+            TextLabelFormField(
+              controller: _idNumberController,
+              label: "Cedula",
+              validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una opción';
+                  }
+                  return null;
+              }
+            ),
+            TextLabelFormField(
+              controller: _namesController,
+              label: "Nombres:",
+              validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una opción';
+                  }
+                  return null;
+              }
+            ),
+            TextLabelFormField(
+              controller: _lastNamesController,
+              label: "Apellidos:",
+              validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una opción';
+                  }
+                  return null;
+              }
+            ),
+            DropdownFormField(
+              label: 'Género:', 
+              items: const ['Masculino', 'Femenino', 'Otro', 'Prefiero no decirlo'],
+              value: _genderSelectedOption,
+              onChanged: (value) {
+                  setState(() {
+                    _genderSelectedOption = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una opción';
+                  }
+                  return null;
+                },
+            ),
+            TextLabelFormField(
+              controller: _homeAddressController,
+              label: "Dirección domicilio:",
+              validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una opción';
+                  }
+                  return null;
+              }
+            ),
+            DropdownFormField(
+              label: 'Ciudad:', 
+              items: const ['Quito', 'Guayaquil', 'Cuenca'],
+              value: _citySelectedOption,
+              onChanged: (value) {
+                  setState(() {
+                    _citySelectedOption = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una opción';
+                  }
+                  return null;
+                },
+            ),
+            DropdownFormField(
+              label: 'Recinto:', 
+              items: const ['Vicente Rocafuerte', 'Daule', 'Alborada'],
+              value: _precinctSelectedOption,
+              onChanged: (value) {
+                  setState(() {
+                    _precinctSelectedOption = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una opción';
+                  }
+                  return null;
+                },
+            ),
+            NumericFormField(
+              controller: _firstNumberController,
+              label: 'Teléfono principal:',
+              validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una opción';
+                  }
+                  return null;
+              },
+            ),
+            NumericFormField(
+              controller: _auxiliarNumberController,
+              label: 'Teléfono principal:',
+              validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una opción';
+                  }
+                  return null;
+              },
+            ),
             _buildImageUploadField(label: 'Documento de identidad', file: _documentFile, isDocument: true),
             _buildImageUploadField(label: 'Carnet delegado', file: _delegateCardFile, isDocument: false),
           ],
@@ -77,65 +190,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       );
   }
 
-  Widget _buildTextField({required String label, required String initialValue}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(
-          labelText: label,
-          border: const OutlineInputBorder(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDropdownField({required String label, required List<String> options}) {
-    String selectedValue = options[0];
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: DropdownButtonFormField<String>(
-        value: selectedValue,
-        items: options
-            .map((option) => DropdownMenuItem(value: option, child: Text(option)))
-            .toList(),
-        onChanged: (value) {
-          setState(() {
-            selectedValue = value!;
-          });
-        },
-        decoration: InputDecoration(
-          labelText: label,
-          border: const OutlineInputBorder(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGenderDropdown() {
-    String selectedGender = 'Prefiero no decirlo';
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: DropdownButtonFormField<String>(
-        value: selectedGender,
-        items: const [
-          DropdownMenuItem(value: 'Masculino', child: Text('Masculino')),
-          DropdownMenuItem(value: 'Femenino', child: Text('Femenino')),
-          DropdownMenuItem(
-              value: 'Prefiero no decirlo', child: Text('Prefiero no decirlo')),
-        ],
-        onChanged: (value) {
-          setState(() {
-            selectedGender = value!;
-          });
-        },
-        decoration: const InputDecoration(
-          labelText: 'Género',
-          border: OutlineInputBorder(),
-        ),
-      ),
-    );
-  }
 
   Widget _buildImageUploadField({required String label, File? file, required bool isDocument}) {
     return Padding(
@@ -157,8 +211,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 )
               : TextButton.icon(
                   onPressed: () => _pickImage(isDocument: isDocument),
-                  icon: const Icon(Icons.camera_alt),
-                  label: const Text('Tomar una foto'),
+                  icon: Icon(
+                    Icons.camera_alt,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  label: Text(
+                    'Tomar una foto',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 ),
         ],
       ),

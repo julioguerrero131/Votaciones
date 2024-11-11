@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:votaciones_movil/routes/app_routes.dart';
 import 'package:votaciones_movil/screens/actas.dart';
 import 'package:votaciones_movil/screens/profile.dart';
 
@@ -50,7 +51,7 @@ class _MainPageState extends State<MainPage> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               // Aquí colocas la acción para volver atrás
-              // Navigator.pop(context);
+              Navigator.popAndPushNamed(context, AppRoutes.login);
             },
           ),
         ],
