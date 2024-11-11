@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:votaciones_movil/screens/actas.dart';
 import 'package:votaciones_movil/screens/profile.dart';
-import 'package:votaciones_movil/screens/report_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -13,12 +13,12 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   static final List<Widget> _screens = <Widget>[
-    const ReportPage(),
+    ActasScreen(),
     const UserProfileScreen(),
   ];
 
   static final List<String> _screensStr = <String>[
-    "Informe",
+    "Actas",
     "Perfil",
   ];
 
@@ -61,11 +61,13 @@ class _MainPageState extends State<MainPage> {
         onTap: _onItemTapped,
         backgroundColor: Theme.of(context).primaryColor,
         selectedIconTheme: const IconThemeData(
-          color: Colors.white,
+          color: Colors.white, 
         ),
         selectedLabelStyle: const TextStyle(
-          color: Colors.white,
-          ),
+          fontWeight: FontWeight.normal, 
+        ),
+        selectedItemColor:Colors.white, 
+        unselectedItemColor: Colors.grey, 
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

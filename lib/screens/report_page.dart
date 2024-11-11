@@ -3,6 +3,7 @@ import 'package:votaciones_movil/components/NumericFormField.dart';
 import 'package:votaciones_movil/components/DropDownFormField.dart';
 import 'package:votaciones_movil/components/TextLabelFormField.dart';
 import 'package:votaciones_movil/components/showAlertDialog.dart';
+import 'package:votaciones_movil/routes/app_routes.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
@@ -133,7 +134,32 @@ class _ReportPageState extends State<ReportPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Informe",
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            // Aquí colocas la acción para el botón de menú
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              // Aquí colocas la acción para volver atrás
+              Navigator.pushNamed(context, AppRoutes.main);
+            },
+          ),
+        ]
+      ),
+      body: SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Form(
         key: _reportKey,
@@ -320,8 +346,10 @@ class _ReportPageState extends State<ReportPage> {
                   child: const Text('Guardar Datos y Enviar'),
                 ),
               )
-            ]),
+            ]
+            ),
       ),
+    ),
     );
   }
 }

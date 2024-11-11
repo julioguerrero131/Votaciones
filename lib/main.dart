@@ -89,7 +89,10 @@ void main() => runApp(MaterialApp(
           return null; // color por defecto cuando no está seleccionado
         },
       ),
-      checkColor: WidgetStateProperty.all(Colors.white), // color del check
+
+      checkColor: WidgetStateProperty.all(
+        Colors.white
+      ), // color del check
     ),
   ),
 ));
