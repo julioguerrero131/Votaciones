@@ -1,23 +1,11 @@
 import 'package:flutter/material.dart';
-import 'screens/profile.dart';
-import 'screens/recover_code_page.dart';
-import 'screens/recover_account_page.dart';
-import 'screens/new_password_page.dart';
-import 'screens/login_page.dart';
-import 'screens/report_page.dart';
+import 'package:votaciones_movil/routes/app_routes.dart';
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
 
-  initialRoute: '/report',
-  routes: {
-    '/':(context) => const LoginPage(),
-    '/recover_account':(context) => RecoverAccountPage(),
-    '/recover_code': (context) => RecoverCodePage(),
-    '/new_password': (context) => NewPasswordPage(),
-    '/profile': (context) => const UserProfileScreen(),
-    '/report': (context) => ReportPage(),
-  },
+  initialRoute: AppRoutes.login,
+  routes: AppRoutes.getRoutes(),
 
   theme: ThemeData(
 

@@ -29,16 +29,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Perfil'),
-        centerTitle: true,
-        leading: const Icon(Icons.notifications_none),
-        actions: const [
-          Icon(Icons.refresh),
-        ],
-      ),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -83,8 +74,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             _buildImageUploadField(label: 'Carnet delegado', file: _delegateCardFile, isDocument: false),
           ],
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildTextField({required String label, required String initialValue}) {

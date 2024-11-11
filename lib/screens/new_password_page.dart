@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:votaciones_movil/routes/app_routes.dart';
 
 class NewPasswordPage extends StatelessWidget {
   NewPasswordPage({super.key});
 
   final _recoverFormKey = GlobalKey<FormState>();
-  final _newPasswordController = TextEditingController();
+
+  final _newPassword1Controller = TextEditingController();
+  final _newPassword2Controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    // Función para enviar el formulario
+    void _submitForm() {
+      if (_recoverFormKey.currentState!.validate()) {
+        // Si el formulario es válido, realiza la acción de login
+        print('Formulario válido');
+        // Aquí puedes agregar la lógica de autenticación
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+      } else {
+        print('Formulario no válido');
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -42,7 +57,9 @@ class NewPasswordPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
-                const SizedBox(height: 5,),
+                const SizedBox(
+                  height: 5,
+                ),
                 Text(
                   'Para recuperar su contraseña, escriba el código de seis dígitos que se te envió por correo.',
                   style: Theme.of(context).textTheme.bodyMedium,
@@ -69,7 +86,7 @@ class NewPasswordPage extends StatelessWidget {
                       color: Color(0xFF9faed6),
                     ),
                   ),
-                  controller: _newPasswordController, /////// Cambiarrrrr
+                  controller: _newPassword1Controller,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, ingresa un usuario';
@@ -97,7 +114,7 @@ class NewPasswordPage extends StatelessWidget {
                       color: Color(0xFF9faed6),
                     ),
                   ),
-                  controller: _newPasswordController, /////// Cambiarrrrr
+                  controller: _newPassword2Controller, /////// Cambiarrrrr
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, ingresa su contraseña';

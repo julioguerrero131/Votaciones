@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:votaciones_movil/routes/app_routes.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -50,6 +51,7 @@ class _LoginPageState extends State<LoginPage> {
       // Si el formulario es válido, realiza la acción de login
       print('Formulario válido');
       // Aquí puedes agregar la lógica de autenticación
+      Navigator.pushReplacementNamed(context, AppRoutes.main);
     } else {
       print('Formulario no válido');
     }
