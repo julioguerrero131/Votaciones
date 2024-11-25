@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:votaciones_movil/components/DropDownFormField.dart';
-import 'package:votaciones_movil/components/NumericFormField.dart';
+import 'package:votaciones_movil/components/dropdown_form_field.dart';
+import 'package:votaciones_movil/components/numeric_form_field.dart';
 import 'dart:io';
 
-import 'package:votaciones_movil/components/TextLabelFormField.dart';
+import 'package:votaciones_movil/components/text_label%20_form_fieldl.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});

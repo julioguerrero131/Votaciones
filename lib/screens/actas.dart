@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:votaciones_movil/components/ActaCard.dart';
+import 'package:votaciones_movil/components/acta_card.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
 
 class ActasScreen extends StatelessWidget {

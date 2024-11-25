@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:votaciones_movil/components/numeric_form_field.dart';
+import 'package:votaciones_movil/routes/app_routes.dart';
 
 class RecoverCodePage extends StatelessWidget {
   RecoverCodePage({super.key});
@@ -64,6 +67,10 @@ class RecoverCodePage extends StatelessWidget {
                   height: 3,
                 ),
                 TextFormField(
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   textAlign: TextAlign.left,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(
@@ -83,7 +90,7 @@ class RecoverCodePage extends StatelessWidget {
                   height: 10,
                 ),
                 Container(
-                    alignment: Alignment.centerLeft, 
+                    alignment: Alignment.centerLeft,
                     child: GestureDetector(
                       onTap: () {
                         // reenvio de codigo
@@ -91,17 +98,16 @@ class RecoverCodePage extends StatelessWidget {
                       child: Text(
                         'Reenviar código',
                         style: Theme.of(context).textTheme.bodyMedium,
-                        textAlign: TextAlign.right, 
+                        textAlign: TextAlign.right,
                       ),
-                    )
-                ),
+                    )),
                 const SizedBox(
                   height: 50,
                 ),
                 ElevatedButton(
                   onPressed: () {
                     if (_loginFormKey.currentState!.validate()) {
-                      Navigator.pushNamed(context, '/new_password');
+                      Navigator.pushNamed(context, AppRoutes.newPassword);
                       // Aquí va la lógica para autenticar al usuarios
                     }
                   },

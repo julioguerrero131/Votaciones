@@ -127,7 +127,7 @@ class NewPasswordPage extends StatelessWidget {
                   onPressed: () {
                     if (_recoverFormKey.currentState!.validate()) {
                       // Aquí va la lógica para autenticar al usuario
-                      Navigator.pushNamed(context, '/');
+                      Navigator.popAndPushNamed(context, AppRoutes.login);
                     }
                   },
                   // style: ElevatedButton.styleFrom(

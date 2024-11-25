@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:votaciones_movil/routes/app_routes.dart';
 
 class RecoverAccountPage extends StatelessWidget {
   RecoverAccountPage({super.key});
@@ -83,7 +84,7 @@ class RecoverAccountPage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     if (_loginFormKey.currentState!.validate()) {
-                      Navigator.pushNamed(context, '/recover_code');
+                      Navigator.pushNamed(context, AppRoutes.recoverCode);
                       // Aquí va la lógica para autenticar al usuarios
                     }
                   },
