@@ -70,13 +70,13 @@ class RecoverAccountPage extends StatelessWidget {
                       color: Color(0xFF9faed6),
                     ),
                   ),
-                  controller: _emailController, /////// Cambiarrrrr
+                  controller: _emailController, 
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, ingresa un correo';
                     }
                     return null;
-                  }, /////// Cambiarrrrr
+                  }, 
                 ),
                 const SizedBox(
                   height: 100,

@@ -11,15 +11,35 @@ class NewPasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Función para enviar el formulario
-    void _submitForm() {
-      if (_recoverFormKey.currentState!.validate()) {
-        // Si el formulario es válido, realiza la acción de login
-        print('Formulario válido');
-        // Aquí puedes agregar la lógica de autenticación
-        Navigator.pushReplacementNamed(context, AppRoutes.login);
+    // Validar la contraseña
+    bool validatePassword() {
+      // Contraseñas de longitud mayor a 8
+      if (_newPassword1Controller.text.length > 8 &&
+          _newPassword1Controller.text.length < 32) {
+        if (_newPassword1Controller.text == _newPassword2Controller.text) {
+          return true;
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Contraseñas no coinciden.')),
+          );
+        }
       } else {
-        print('Formulario no válido');
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Contraseñas muy corta.')),
+          );
+      }
+      return false;
+    }
+
+    // Función para enviar el formulario
+    void submitForm() {
+      // Formulario valido
+      if (_recoverFormKey.currentState!.validate()) {
+        final validPassword = validatePassword();
+        if (validPassword) {
+          Navigator.pushReplacementNamed(context, AppRoutes.login);
+          // Logica para guardar contraseña
+        }
       }
     }
 
@@ -114,7 +134,7 @@ class NewPasswordPage extends StatelessWidget {
                       color: Color(0xFF9faed6),
                     ),
                   ),
-                  controller: _newPassword2Controller, /////// Cambiarrrrr
+                  controller: _newPassword2Controller,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, ingresa su contraseña';
@@ -124,21 +144,7 @@ class NewPasswordPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 66),
                 ElevatedButton(
-                  onPressed: () {
-                    if (_recoverFormKey.currentState!.validate()) {
-                      // Aquí va la lógica para autenticar al usuario
-                      Navigator.popAndPushNamed(context, AppRoutes.login);
-                    }
-                  },
-                  // style: ElevatedButton.styleFrom(
-                  //   backgroundColor: const Color(0xFF383ea5), // Color de fondo del botón
-                  //   foregroundColor: Colors.white,      // Color del texto del botón
-                  //   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16), // Tamaño del padding interno
-                  //   textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w100, letterSpacing: BorderSide.strokeAlignInside), // Estilo del texto
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(20), // Bordes redondeados
-                  //   ),
-                  // ),
+                  onPressed: submitForm,
                   child: const Text('INICIAR SESIÓN'),
                 ),
               ],
