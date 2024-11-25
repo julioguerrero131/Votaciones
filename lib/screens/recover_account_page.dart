@@ -9,6 +9,23 @@ class RecoverAccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isValidEmail() {
+      final bool emailValid = RegExp(
+              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+          .hasMatch(_emailController.text);
+      return emailValid;
+    }
+
+    void submitForm() {
+      if (_loginFormKey.currentState!.validate() && isValidEmail()) {
+        Navigator.pushNamed(context, AppRoutes.recoverCode);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Correo No Válido.')),
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -43,7 +60,9 @@ class RecoverAccountPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
-                const SizedBox(height: 5,),
+                const SizedBox(
+                  height: 5,
+                ),
                 Text(
                   'Para recuperar su contraseña, escriba el correo con el que se registró para enviarle un mail de recuperación.',
                   style: Theme.of(context).textTheme.bodyMedium,
@@ -70,33 +89,19 @@ class RecoverAccountPage extends StatelessWidget {
                       color: Color(0xFF9faed6),
                     ),
                   ),
-                  controller: _emailController, 
+                  controller: _emailController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, ingresa un correo';
                     }
                     return null;
-                  }, 
+                  },
                 ),
                 const SizedBox(
                   height: 100,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (_loginFormKey.currentState!.validate()) {
-                      Navigator.pushNamed(context, AppRoutes.recoverCode);
-                      // Aquí va la lógica para autenticar al usuarios
-                    }
-                  },
-                  // style: ElevatedButton.styleFrom(
-                  //   backgroundColor: const Color(0xFF383ea5), // Color de fondo del botón
-                  //   foregroundColor: Colors.white,      // Color del texto del botón
-                  //   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16), // Tamaño del padding interno
-                  //   textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w100, letterSpacing: BorderSide.strokeAlignInside), // Estilo del texto
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(20), // Bordes redondeados
-                  //   ),
-                  // ),
+                  onPressed: submitForm,
                   child: const Text('ENVIAR'),
                 ),
               ],

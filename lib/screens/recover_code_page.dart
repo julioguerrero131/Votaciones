@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:votaciones_movil/components/numeric_form_field.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
 
 class RecoverCodePage extends StatelessWidget {
