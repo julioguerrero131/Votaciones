@@ -43,7 +43,7 @@ class _ReportPageState extends State<ReportPage> {
       int blankVotes = int.tryParse(_numberBlankVotesController.text) ?? 0;
       int nullVotes = int.tryParse(_numberNullVotesController.text) ?? 0;
 
-      if (totalVotes < 200 || totalVotes > 350) {
+      if (totalVotes < 200 || totalVotes > 310) {
         showAlertDialog(
           context: context,
           title: 'Votos Totales Incorrectos.',

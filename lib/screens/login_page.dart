@@ -49,11 +49,11 @@ class _LoginPageState extends State<LoginPage> {
   void _submitForm() {
     if (_loginFormKey.currentState!.validate()) {
       // Si el formulario es válido, realiza la acción de login
-      print('Formulario válido');
       // Aquí puedes agregar la lógica de autenticación
       Navigator.pushReplacementNamed(context, AppRoutes.main);
     } else {
-      print('Formulario no válido');
+      // No inicia sesion
+      return;
     }
   }
 
@@ -79,130 +79,134 @@ class _LoginPageState extends State<LoginPage> {
         //   ),
         // ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-            key: _loginFormKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'BIENVENIDO!',
-                    style: Theme.of(context).textTheme.headlineSmall,
+      resizeToAvoidBottomInset: false,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+              key: _loginFormKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'BIENVENIDO!',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Icon(
-                        Icons.account_circle_outlined,
-                        color: Color(0xFFfa0093),
-                        size: 24.0,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        'Inicio de Sesión',
-                        style: TextStyle(
-                          color: Color(0xFF18599d),
-                          fontSize: 20,
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 16,
                         ),
-                      )
-                    ]),
-                const SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Usuario:',
-                    style: Theme.of(context).textTheme.labelLarge,
+                        Icon(
+                          Icons.account_circle_outlined,
+                          color: Color(0xFFfa0093),
+                          size: 24.0,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'Inicio de Sesión',
+                          style: TextStyle(
+                            color: Color(0xFF18599d),
+                            fontSize: 20,
+                          ),
+                        )
+                      ]),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Usuario:',
+                      style: Theme.of(context).textTheme.labelLarge,
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  TextFormField(
                     textAlign: TextAlign.left,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.account_circle_outlined,
+                        color: Color(0xFF9faed6),
+                      ),
+                    ),
+                    controller: _usernameController,
+                    validator: _validateUsername,
                   ),
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                TextFormField(
-                  textAlign: TextAlign.left,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.account_circle_outlined,
-                      color: Color(0xFF9faed6),
+                  const SizedBox(height: 16),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Contraseña:',
+                      style: Theme.of(context).textTheme.labelLarge,
+                      textAlign: TextAlign.left,
                     ),
                   ),
-                  controller: _usernameController,
-                  validator: _validateUsername,
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Contraseña:',
-                    style: Theme.of(context).textTheme.labelLarge,
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  TextFormField(
                     textAlign: TextAlign.left,
-                  ),
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                TextFormField(
-                  textAlign: TextAlign.left,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.lock_sharp,
-                      color: Color(0xFF9faed6),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        // Cambia el icono dependiendo de si la contraseña está visible o no
-                        _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.lock_sharp,
+                        color: Color(0xFF9faed6),
                       ),
-                      onPressed: () {
-                        // Cambiar el estado para mostrar/ocultar la contraseña
-                        setState(() {
-                          _passwordVisible = !_passwordVisible;
-                        });
-                      },
-                      color: const Color(0xFF9faed6),
-                    ),
-                  ),
-                  controller: _passwordController, 
-                  validator: _validatePassword,
-                  obscureText: !_passwordVisible,
-                ),
-                const SizedBox(height: 16),
-                Container(
-                    alignment: Alignment.centerRight, 
-                    child: GestureDetector(
-                      onTap: () {
-                        
-                        Navigator.pushNamed(context, '/recover_account');
-                      },
-                      child: Text(
-                        '¿Olvidaste tu contraseña?',
-                        style: Theme.of(context).textTheme.labelSmall,
-                        textAlign: TextAlign.right, 
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          // Cambia el icono dependiendo de si la contraseña está visible o no
+                          _passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          // Cambiar el estado para mostrar/ocultar la contraseña
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
+                        color: const Color(0xFF9faed6),
                       ),
-                    )),
-                const SizedBox(
-                  height: 50,
-                ),
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('INICIAR SESIÓN'),
-                ),
-              ],
-            )),
+                    ),
+                    controller: _passwordController,
+                    validator: _validatePassword,
+                    obscureText: !_passwordVisible,
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/recover_account');
+                        },
+                        child: Text(
+                          '¿Olvidaste tu contraseña?',
+                          style: Theme.of(context).textTheme.labelSmall,
+                          textAlign: TextAlign.right,
+                        ),
+                      )),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  ElevatedButton(
+                    onPressed: _submitForm,
+                    child: const Text('INICIAR SESIÓN'),
+                  ),
+                ],
+              )),
+        ),
       ),
     );
   }
