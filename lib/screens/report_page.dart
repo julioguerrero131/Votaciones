@@ -43,6 +43,15 @@ class _ReportPageState extends State<ReportPage> {
       int blankVotes = int.tryParse(_numberBlankVotesController.text) ?? 0;
       int nullVotes = int.tryParse(_numberNullVotesController.text) ?? 0;
 
+      if (totalVotes < 200 || totalVotes > 350) {
+        showAlertDialog(
+          context: context,
+          title: 'Votos Totales Incorrectos.',
+          message: 'El número de Votos Totales, debe ser MAYOR a 200, y MENOR a 350.',
+        );
+        return;
+      }
+
       // Calcula la suma de votos válidos, blancos y nulos
       int sumVotes = validVotes + blankVotes + nullVotes;
 
@@ -57,9 +66,9 @@ class _ReportPageState extends State<ReportPage> {
         if (_submitTotalAttempt == 0) {
           showAlertDialog(
             context: context,
-            title: 'Error',
+            title: 'Suma Incorrecta de Votos Totales.',
             message:
-                'La suma de Válidos, Blancos y Nulos no coincide con Totales.',
+                'La suma de los Votos Válidos, Blancos y Nulos no coincide con los Votos Totales.',
           );
           _submitTotalAttempt++;
           return; // No enviamos el formulario si no coinciden
@@ -67,11 +76,11 @@ class _ReportPageState extends State<ReportPage> {
       }
 
       // Validar el rango de la suma de los votos
-      if (candidatesVotes < 0 || candidatesVotes != validVotes) {
+      if (candidatesVotes != validVotes) {
         if (_submitNumericAttempt == 0) {
           showAlertDialog(
             context: context,
-            title: 'Advertencia',
+            title: 'Cantidad Incorrecta de Votos Válidos',
             message:
                 'La cantidad de Votos Válidos no coincide con la suma de los Votos de cada Candidatos.',
           );
@@ -82,7 +91,7 @@ class _ReportPageState extends State<ReportPage> {
     } else {
       showAlertDialog(
         context: context,
-        title: 'Error: Formulario No Válido',
+        title: 'Campos Faltantes.',
         message: 'Por favor, completa todos los campos correctamente.',
       );
       return;
@@ -94,8 +103,9 @@ class _ReportPageState extends State<ReportPage> {
       if (_submitCheckboxAttempt == 0) {
         showAlertDialog(
           context: context,
-          title: 'Advertencia',
-          message: 'Debe marcar al menos un checkbox antes de enviar.',
+          title: 'Advertencia: Nadie Firmó las actas.',
+          message: 
+            'No ha marcado ninguna casilla, por lo que indica que ningún miembro de la mesa ha firmado el acta.',
         );
         _submitCheckboxAttempt++;
         return; // No enviamos el formulario en el primer intento
@@ -104,8 +114,8 @@ class _ReportPageState extends State<ReportPage> {
 
     showAlertDialog(
       context: context,
-      title: 'Correcto',
-      message: 'Los datos son correctos. La suma de los votos es válida.',
+      title: 'Envío Correcto.',
+      message: 'Los datos han sido revisados y enviados.',
     );
     // Aquí puedes agregar la lógica de envío de datos
     _submitNumericAttempt = 0;
@@ -168,7 +178,7 @@ class _ReportPageState extends State<ReportPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Ingrese la cantidad de votos según corresponda",
+                "Ingrese la cantidad de votos según corresponda.",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const Divider(
@@ -187,7 +197,7 @@ class _ReportPageState extends State<ReportPage> {
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, seleccione una opción';
+                    return 'Por favor, seleccione una opción.';
                   }
                   return null;
                 },
@@ -200,7 +210,7 @@ class _ReportPageState extends State<ReportPage> {
                       label: 'Totales:',
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, ingrese un número';
+                          return 'Por favor, ingrese un número.';
                         }
                         return null;
                       },
@@ -213,7 +223,7 @@ class _ReportPageState extends State<ReportPage> {
                       label: 'Válidos:',
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, ingrese un número';
+                          return 'Por favor, ingrese un número.';
                         }
                         return null;
                       },
@@ -226,7 +236,7 @@ class _ReportPageState extends State<ReportPage> {
                       label: 'Blancos:',
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, ingrese un número';
+                          return 'Por favor, ingrese un número.';
                         }
                         return null;
                       },
@@ -239,7 +249,7 @@ class _ReportPageState extends State<ReportPage> {
                       label: 'Nulos:',
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, ingrese un número';
+                          return 'Por favor, ingrese un número.';
                         }
                         return null;
                       },
@@ -264,7 +274,7 @@ class _ReportPageState extends State<ReportPage> {
                           label: 'Candidato:',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Este campo no puede estar vacío';
+                              return 'Este campo no puede estar vacío.';
                             }
                             return null;
                           },
@@ -280,7 +290,7 @@ class _ReportPageState extends State<ReportPage> {
                           label: 'Votos:',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Por favor, ingrese un número';
+                              return 'Por favor, ingrese un número.';
                             }
                             return null;
                           },
@@ -301,7 +311,7 @@ class _ReportPageState extends State<ReportPage> {
                     },
                   ),
                   Text(
-                    'Firmó Presidente de la JRV',
+                    'Firmó Presidente de la JRV.',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -317,7 +327,7 @@ class _ReportPageState extends State<ReportPage> {
                     },
                   ),
                   Text(
-                    'Firmó Secretaría de la JRV',
+                    'Firmó Secretaría de la JRV.',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -333,7 +343,7 @@ class _ReportPageState extends State<ReportPage> {
                     },
                   ),
                   Text(
-                    'Firmaron TODOS los Delegados de la JRV',
+                    'Firmaron TODOS los Delegados de la JRV.',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
