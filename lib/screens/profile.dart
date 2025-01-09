@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:votaciones_movil/components/dropdown_form_field.dart';
+import 'package:votaciones_movil/components/image_viewer.dart';
 import 'package:votaciones_movil/components/numeric_form_field.dart';
 import 'dart:io';
 
-import 'package:votaciones_movil/components/text_label%20_form_fieldl.dart';
+import 'package:votaciones_movil/components/text_label%20_form_field.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -185,6 +186,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             _buildImageUploadField(label: 'Documento de identidad', file: _documentFile, isDocument: true),
             _buildImageUploadField(label: 'Carnet delegado', file: _delegateCardFile, isDocument: false),
+            const SizedBox(height: 10),
+              Container(
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                  onPressed: (){},
+                  child: const Text('GUARDAR CAMBIOS'),
+                ),
+              ),
           ],
         ),
       );
@@ -192,38 +201,48 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
 
   Widget _buildImageUploadField({required String label, File? file, required bool isDocument}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 8),
-          file != null
-              ? ListTile(
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 16),
+        ),
+        const SizedBox(height: 8),
+        file != null
+            ? InkWell( // Usamos InkWell para detectar el tap y dar feedback visual
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImageViewer(file: file), // Navegamos a un visor
+                    ),
+                  );
+                },
+                child: ListTile(
                   leading: const Icon(Icons.image),
                   title: Text(file.path.split('/').last),
                   subtitle: Text('${file.lengthSync() / 1024} KB'),
                   trailing: const Icon(Icons.check_circle, color: Colors.green),
-                )
-              : TextButton.icon(
-                  onPressed: () => _pickImage(isDocument: isDocument),
-                  icon: Icon(
-                    Icons.camera_alt,
+                ),
+              )
+            : TextButton.icon(
+                onPressed: () => _pickImage(isDocument: isDocument),
+                icon: Icon(
+                  Icons.camera_alt,
+                  color: Theme.of(context).primaryColor,
+                ),
+                label: Text(
+                  'Tomar una foto',
+                  style: TextStyle(
                     color: Theme.of(context).primaryColor,
                   ),
-                  label: Text(
-                    'Tomar una foto',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
                 ),
-        ],
-      ),
-    );
-  }
+              ),
+      ],
+    ),
+  );
+}
 }

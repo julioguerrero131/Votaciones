@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:votaciones_movil/components/numeric_form_field.dart';
 import 'package:votaciones_movil/components/dropdown_form_field.dart';
-import 'package:votaciones_movil/components/text_label%20_form_fieldl.dart';
+import 'package:votaciones_movil/components/text_label%20_form_field.dart';
 import 'package:votaciones_movil/components/show_alert_dialog.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
 
