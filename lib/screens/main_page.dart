@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
 import 'package:votaciones_movil/screens/actas.dart';
 import 'package:votaciones_movil/screens/profile.dart';
+import 'package:badges/badges.dart' as badges;
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -12,6 +13,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
+  int numNotifications = 3;
 
   static final List<Widget> _screens = <Widget>[
     const ActasScreen(),
@@ -47,6 +49,22 @@ class _MainPageState extends State<MainPage> {
             },
           ),
           actions: [
+            badges.Badge(
+            badgeContent: Text(numNotifications.toString(), style: TextStyle(color: Colors.white)),
+            showBadge: numNotifications > 0, // Oculta el badge si no hay notificaciones
+            child: IconButton(
+              icon: Icon(Icons.notifications),
+              onPressed: () {
+                setState(() {
+                  numNotifications = 0; // Ejemplo: al abrir se marcan como leídas
+                });
+                /*Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PantallaNotificaciones()),
+                );*/
+              },
+            ),
+          ),
             IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
