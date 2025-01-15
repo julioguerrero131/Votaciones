@@ -20,7 +20,7 @@ class _ReportPageState extends State<ReportPage> {
   final _numberBlankVotesController = TextEditingController();
   final _numberNullVotesController = TextEditingController();
 
-  List<String> items = ['Candidato 1', 'Candidato 2', 'Candidato 3'];
+  List<String> items = ['ADN - Daniel Noboa', 'RC - Luisa Gonzlez', 'PSC - Henry Kronfle'];
 
   List<TextEditingController> controllersFirstField = [];
   List<TextEditingController> controllersSecondField = [];

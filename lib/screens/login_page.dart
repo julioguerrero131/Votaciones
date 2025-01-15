@@ -1,5 +1,7 @@
+// import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
+import 'package:votaciones_movil/services/users_data.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,6 +17,14 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   bool _passwordVisible = false;
+
+  late Future<UserData> futureUsers;
+
+  @override
+  void initState() {
+    super.initState();
+    futureUsers = fetchUsers();
+  }
 
   @override
   void dispose() {

@@ -50,21 +50,24 @@ class _MainPageState extends State<MainPage> {
           ),
           actions: [
             badges.Badge(
-            badgeContent: Text(numNotifications.toString(), style: TextStyle(color: Colors.white)),
-            showBadge: numNotifications > 0, // Oculta el badge si no hay notificaciones
-            child: IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () {
-                setState(() {
-                  numNotifications = 0; // Ejemplo: al abrir se marcan como leídas
-                });
-                /*Navigator.push(
+              badgeContent: Text(numNotifications.toString(),
+                  style: const TextStyle(color: Colors.white)),
+              showBadge: numNotifications >
+                  0, // Oculta el badge si no hay notificaciones
+              child: IconButton(
+                icon: const Icon(Icons.notifications), 
+                onPressed: () {
+                  setState(() {
+                    numNotifications = 0; // Ejemplo: al abrir se marcan como leídas
+                    
+                  });
+                  /*Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => PantallaNotificaciones()),
                 );*/
-              },
+                },
+              ),
             ),
-          ),
             IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
@@ -76,8 +79,7 @@ class _MainPageState extends State<MainPage> {
         ),
         body: _screens[_selectedIndex],
         bottomNavigationBar: Container(
-            margin: const EdgeInsets.symmetric(
-                  horizontal: 16.0, vertical: 8.0),
+            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30.0),
               child: BottomNavigationBar(
