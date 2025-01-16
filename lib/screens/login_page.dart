@@ -4,6 +4,8 @@ import 'package:votaciones_movil/blocs/login_bloc.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
 import 'package:votaciones_movil/models/users_data.dart';
 import 'package:votaciones_movil/services/api_service.dart';
+import 'package:votaciones_movil/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -28,13 +30,12 @@ class _LoginPageState extends State<LoginPage> {
 
     final user = await loginBloc.login(username, password);
     if (user.isNotEmpty) {
+      context.read<UserProvider>().setUser(user);
       Navigator.pushReplacementNamed(context, AppRoutes.main);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Usuario o contraseña incorrectos.')),
       );
-      print(user.isNotEmpty);
-      print(user.cedula);
     }
   }
 

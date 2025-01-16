@@ -6,6 +6,8 @@ import 'package:votaciones_movil/components/numeric_form_field.dart';
 import 'dart:io';
 
 import 'package:votaciones_movil/components/text_label%20_form_field.dart';
+import 'package:votaciones_movil/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -18,16 +20,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   File? _documentFile;
   File? _delegateCardFile;
   final ImagePicker _picker = ImagePicker();
-
-  final _idNumberController = TextEditingController(text: '0909090909');
-  final _namesController = TextEditingController(text: 'Andrés Santiago');
-  final _lastNamesController = TextEditingController(text: 'Pérez Sánchez');
-  String? _genderSelectedOption = 'Masculino';
-  final _homeAddressController = TextEditingController(text: 'Av. Quito 324');
-  String? _citySelectedOption = 'Guayaquil';
-  String? _precinctSelectedOption = 'Vicente Rocafuerte';
-  final _firstNumberController = TextEditingController(text: '0909090909');
-  final _auxiliarNumberController = TextEditingController(text: '0909090902');
 
 
   Future<void> _pickImage({required bool isDocument}) async {
@@ -45,6 +37,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<UserProvider>().user;
+
+    final idNumberController = TextEditingController(text: user?.cedula);
+    final namesController = TextEditingController(text: user?.nombres);
+    final lastNamesController = TextEditingController(text: user?.apellidos);
+    String? genderSelectedOption = user?.genero;
+    final homeAddressController = TextEditingController(text: user?.direccion);
+    final firstNumberController = TextEditingController(text: user?.telefono);
+    final auxiliarNumberController = TextEditingController(text: user?.telefonoAux);
+    final name = user?.nombres ?? 'Nombre no disponible';
+
     return SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -61,9 +64,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Juanito Pérez',
-              style: TextStyle(
+            Text(
+              name,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -77,7 +80,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             const SizedBox(height: 20),
             TextLabelFormField(
-              controller: _idNumberController,
+              controller: idNumberController,
               label: "Cedula",
               validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -87,7 +90,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               }
             ),
             TextLabelFormField(
-              controller: _namesController,
+              controller: namesController,
               label: "Nombres:",
               validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -97,7 +100,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               }
             ),
             TextLabelFormField(
-              controller: _lastNamesController,
+              controller: lastNamesController,
               label: "Apellidos:",
               validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -109,10 +112,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             DropdownFormField(
               label: 'Género:', 
               items: const ['Masculino', 'Femenino', 'Otro', 'Prefiero no decirlo'],
-              value: _genderSelectedOption,
+              value: genderSelectedOption,
               onChanged: (value) {
                   setState(() {
-                    _genderSelectedOption = value;
+                    genderSelectedOption = value;
                   });
                 },
                 validator: (value) {
@@ -123,7 +126,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 },
             ),
             TextLabelFormField(
-              controller: _homeAddressController,
+              controller: homeAddressController,
               label: "Dirección domicilio:",
               validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -132,40 +135,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   return null;
               }
             ),
-            DropdownFormField(
-              label: 'Ciudad:', 
-              items: const ['Quito', 'Guayaquil', 'Cuenca'],
-              value: _citySelectedOption,
-              onChanged: (value) {
-                  setState(() {
-                    _citySelectedOption = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, seleccione una opción';
-                  }
-                  return null;
-                },
-            ),
-            DropdownFormField(
-              label: 'Recinto:', 
-              items: const ['Vicente Rocafuerte', 'Daule', 'Alborada'],
-              value: _precinctSelectedOption,
-              onChanged: (value) {
-                  setState(() {
-                    _precinctSelectedOption = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, seleccione una opción';
-                  }
-                  return null;
-                },
-            ),
             NumericFormField(
-              controller: _firstNumberController,
+              controller: firstNumberController,
               label: 'Teléfono principal:',
               validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -175,7 +146,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               },
             ),
             NumericFormField(
-              controller: _auxiliarNumberController,
+              controller: auxiliarNumberController,
               label: 'Teléfono principal:',
               validator: (value) {
                   if (value == null || value.isEmpty) {
