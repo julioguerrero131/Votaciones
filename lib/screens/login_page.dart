@@ -1,7 +1,9 @@
 // import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:votaciones_movil/blocs/login_bloc.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
-import 'package:votaciones_movil/services/users_data.dart';
+import 'package:votaciones_movil/models/users_data.dart';
+import 'package:votaciones_movil/services/api_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,13 +20,24 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _passwordVisible = false;
 
-  late Future<UserData> futureUsers;
+  final LoginBloc loginBloc = LoginBloc(ApiService('https://sistema-electoral-cc1y.onrender.com/api/'));
 
-  @override
-  void initState() {
-    super.initState();
-    futureUsers = fetchUsers();
+  void _handleLogin() async {
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
+
+    final user = await loginBloc.login(username, password);
+    if (user.isNotEmpty) {
+      Navigator.pushReplacementNamed(context, AppRoutes.main);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Usuario o contraseña incorrectos.')),
+      );
+      print(user.isNotEmpty);
+      print(user.cedula);
+    }
   }
+
 
   @override
   void dispose() {
@@ -60,6 +73,7 @@ class _LoginPageState extends State<LoginPage> {
     if (_loginFormKey.currentState!.validate()) {
       // Si el formulario es válido, realiza la acción de login
       // Aquí puedes agregar la lógica de autenticación
+
       Navigator.pushReplacementNamed(context, AppRoutes.main);
     } else {
       // No inicia sesion
@@ -211,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 50,
                   ),
                   ElevatedButton(
-                    onPressed: _submitForm,
+                    onPressed: _handleLogin,
                     child: const Text('INICIAR SESIÓN'),
                   ),
                 ],
