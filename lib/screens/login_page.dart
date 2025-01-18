@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:votaciones_movil/blocs/login_bloc.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
-import 'package:votaciones_movil/models/users_data.dart';
 import 'package:votaciones_movil/services/api_service.dart';
 import 'package:votaciones_movil/providers/user_provider.dart';
 import 'package:provider/provider.dart';

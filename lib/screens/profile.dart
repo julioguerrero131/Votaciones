@@ -87,7 +87,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     return 'Por favor, seleccione una opción';
                   }
                   return null;
-              }
+              },
+              isReadOnly: true
             ),
             TextLabelFormField(
               controller: namesController,
@@ -97,7 +98,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     return 'Por favor, seleccione una opción';
                   }
                   return null;
-              }
+              },
+              isReadOnly: true
             ),
             TextLabelFormField(
               controller: lastNamesController,
@@ -107,7 +109,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     return 'Por favor, seleccione una opción';
                   }
                   return null;
-              }
+              },
+              isReadOnly: true
             ),
             DropdownFormField(
               label: 'Género:', 
@@ -133,7 +136,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     return 'Por favor, seleccione una opción';
                   }
                   return null;
-              }
+              },
+              isReadOnly: true
             ),
             NumericFormField(
               controller: firstNumberController,
@@ -144,6 +148,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   }
                   return null;
               },
+              isReadOnly: true
             ),
             NumericFormField(
               controller: auxiliarNumberController,
@@ -154,17 +159,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   }
                   return null;
               },
+              isReadOnly: true
             ),
             _buildImageUploadField(label: 'Documento de identidad', file: _documentFile, isDocument: true),
             _buildImageUploadField(label: 'Carnet delegado', file: _delegateCardFile, isDocument: false),
-            const SizedBox(height: 10),
-              Container(
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  onPressed: (){},
-                  child: const Text('GUARDAR CAMBIOS'),
-                ),
-              ),
+            const SizedBox(height: 10)
           ],
         ),
       );

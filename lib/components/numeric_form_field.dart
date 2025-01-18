@@ -5,12 +5,14 @@ class NumericFormField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final String? Function(String?)? validator;
+  final bool isReadOnly;
 
   const NumericFormField({
     super.key,
     required this.controller,
     this.label = 'Número:',
     this.validator,
+    this.isReadOnly = false
   });
 
   @override
@@ -36,6 +38,7 @@ class NumericFormField extends StatelessWidget {
             textAlign: TextAlign.left,
             controller: controller,
             validator: validator,
+            readOnly: isReadOnly,
           ),
         ),
         
