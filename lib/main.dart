@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:votaciones_movil/providers/juntas_provider.dart';
 import 'package:votaciones_movil/providers/user_provider.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
 
 void main() => runApp(
-  ChangeNotifierProvider(
-    create: (_) => UserProvider(),
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => UserProvider()),
+      ChangeNotifierProvider(create: (_) => JuntaProvider()),
+    ],
     child: MyApp(),
   ),
 );

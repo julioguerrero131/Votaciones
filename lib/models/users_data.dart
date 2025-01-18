@@ -1,4 +1,5 @@
 class UserData {
+  final int id;
   final String cedula;
   final String nombres;
   final String apellidos;
@@ -8,6 +9,7 @@ class UserData {
   final String telefonoAux; 
 
   const UserData({
+    required this.id,
     required this.cedula,
     required this.nombres,
     required this.apellidos,
@@ -18,6 +20,7 @@ class UserData {
   });
 
   static const UserData empty = UserData(
+    id: 0,
     cedula: '',
     nombres: '',
     apellidos: '',
@@ -30,6 +33,7 @@ class UserData {
   factory UserData.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {
+        'id': int id,
         'identificacion': String cedula,
         'nombres': String nombres,
         'apellidos': String apellidos,
@@ -39,6 +43,7 @@ class UserData {
         'telefono_aux': String telefonoAux,
       } =>
         UserData(
+          id: id,
           cedula: cedula,
           nombres: nombres,
           apellidos: apellidos,

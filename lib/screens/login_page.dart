@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _passwordVisible = false;
 
-  final LoginBloc loginBloc = LoginBloc(ApiService('https://sistema-electoral-cc1y.onrender.com/api/'));
+  final LoginBloc loginBloc = LoginBloc(ApiService('https://api-observacion-electoral.frative.com/api'));
 
   void _handleLogin() async {
     final username = _usernameController.text.trim();
@@ -66,19 +66,6 @@ class _LoginPageState extends State<LoginPage> {
       return 'La contraseña debe tener al menos 6 caracteres';
     }
     return null;
-  }
-
-  // Función para enviar el formulario
-  void _submitForm() {
-    if (_loginFormKey.currentState!.validate()) {
-      // Si el formulario es válido, realiza la acción de login
-      // Aquí puedes agregar la lógica de autenticación
-
-      Navigator.pushReplacementNamed(context, AppRoutes.main);
-    } else {
-      // No inicia sesion
-      return;
-    }
   }
 
   @override

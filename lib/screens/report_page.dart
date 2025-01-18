@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:votaciones_movil/blocs/reporte_bloc.dart';
 import 'package:votaciones_movil/components/numeric_form_field.dart';
 import 'package:votaciones_movil/components/dropdown_form_field.dart';
 import 'package:votaciones_movil/components/text_label%20_form_field.dart';
 import 'package:votaciones_movil/components/show_alert_dialog.dart';
+import 'package:votaciones_movil/providers/juntas_provider.dart';
+import 'package:votaciones_movil/providers/user_provider.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
+import 'package:votaciones_movil/services/api_service.dart';
+import 'package:votaciones_movil/providers/user_provider.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
@@ -14,13 +20,21 @@ class ReportPage extends StatefulWidget {
 
 class _ReportPageState extends State<ReportPage> {
   final _reportKey = GlobalKey<FormState>();
+  final ReporteBloc reporteBloc = ReporteBloc(
+      ApiService('https://sistema-electoral-cc1y.onrender.com/api'));
+      //https://api-observacion-electoral.frative.com/api
+      //https://sistema-electoral-cc1y.onrender.com/api
 
   final _numberTotalVotesController = TextEditingController();
   final _numberValidVotesController = TextEditingController();
   final _numberBlankVotesController = TextEditingController();
   final _numberNullVotesController = TextEditingController();
 
-  List<String> items = ['ADN - Daniel Noboa', 'RC - Luisa Gonzlez', 'PSC - Henry Kronfle'];
+  List<String> items = [
+    'ADN - Daniel Noboa',
+    'RC - Luisa Gonzlez',
+    'PSC - Henry Kronfle'
+  ];
 
   List<TextEditingController> controllersFirstField = [];
   List<TextEditingController> controllersSecondField = [];
@@ -47,7 +61,8 @@ class _ReportPageState extends State<ReportPage> {
         showAlertDialog(
           context: context,
           title: 'Votos Totales Incorrectos.',
-          message: 'El número de Votos Totales, debe ser MAYOR a 200, y MENOR a 350.',
+          message:
+              'El número de Votos Totales, debe ser MAYOR a 200, y MENOR a 350.',
         );
         return;
       }
@@ -104,8 +119,8 @@ class _ReportPageState extends State<ReportPage> {
         showAlertDialog(
           context: context,
           title: 'Advertencia: Nadie Firmó las actas.',
-          message: 
-            'No ha marcado ninguna casilla, por lo que indica que ningún miembro de la mesa ha firmado el acta.',
+          message:
+              'No ha marcado ninguna casilla, por lo que indica que ningún miembro de la mesa ha firmado el acta.',
         );
         _submitCheckboxAttempt++;
         return; // No enviamos el formulario en el primer intento
@@ -144,222 +159,242 @@ class _ReportPageState extends State<ReportPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<UserProvider>().user;
+    final userProvider = Provider.of<UserProvider>(context);
+    final juntaProvider = Provider.of<JuntaProvider>(context);
+    final juntas = reporteBloc.obtenerNombresDeJuntasPorUsuario(user!.id);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Informe",
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            // Aquí colocas la acción para el botón de menú
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back),
+          title: Text(
+            "Informe",
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.menu),
             onPressed: () {
-              // Aquí colocas la acción para volver atrás
-              Navigator.pushNamed(context, AppRoutes.main);
+              // Aquí colocas la acción para el botón de menú
             },
           ),
-        ]
-      ),
-      body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Form(
-        key: _reportKey,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Ingrese la cantidad de votos según corresponda.",
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              const Divider(
-                color: Color(0xFF18599d), // Cambia el color si lo deseas
-                thickness: 1.0, // Ajusta el grosor de la línea
-                height: 20.0, // Espacio vertical alrededor del Divider
-              ),
-              DropdownFormField(
-                label: 'Seleccione una junta:',
-                items: const ['Junta 1', 'Junta 2', 'Junta 3'],
-                value: _selectedOption,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedOption = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, seleccione una opción.';
-                  }
-                  return null;
-                },
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: NumericFormField(
-                      controller: _numberTotalVotesController,
-                      label: 'Totales:',
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, ingrese un número.';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: NumericFormField(
-                      controller: _numberValidVotesController,
-                      label: 'Válidos:',
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, ingrese un número.';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: NumericFormField(
-                      controller: _numberBlankVotesController,
-                      label: 'Blancos:',
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, ingrese un número.';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: NumericFormField(
-                      controller: _numberNullVotesController,
-                      label: 'Nulos:',
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, ingrese un número.';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              ListView.builder(
-                shrinkWrap:
-                    true, // Esto le dice al ListView que no ocupe todo el espacio disponible
-                physics:
-                    const NeverScrollableScrollPhysics(), // Evita que el ListView intente hacer scroll dentro de SingleChildScrollView
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: TextLabelFormField(
-                          controller: controllersFirstField[
-                              index], // Cambiado para usar un controlador diferente por cada elemento
-                          label: 'Candidato:',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Este campo no puede estar vacío.';
-                            }
-                            return null;
-                          },
-                          isReadOnly: true,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        flex: 1,
-                        child: NumericFormField(
-                          controller: controllersSecondField[
-                              index], // Cambiado para usar un controlador diferente por cada elemento
-                          label: 'Votos:',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor, ingrese un número.';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _isPresidentChecked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _isPresidentChecked = value!;
-                      });
-                    },
-                  ),
-                  Text(
-                    'Firmó Presidente de la JRV.',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _isSecretaryChecked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _isSecretaryChecked = value!;
-                      });
-                    },
-                  ),
-                  Text(
-                    'Firmó Secretaría de la JRV.',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _isDelegatedChecked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _isDelegatedChecked = value!;
-                      });
-                    },
-                  ),
-                  Text(
-                    'Firmaron TODOS los Delegados de la JRV.',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Container(
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('Guardar Datos y Enviar'),
-                ),
-              )
-            ]
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                // Aquí colocas la acción para volver atrás
+                Navigator.pushNamed(context, AppRoutes.main);
+              },
             ),
+          ]),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _reportKey,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Ingrese la cantidad de votos según corresponda.",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const Divider(
+                  color: Color(0xFF18599d), // Cambia el color si lo deseas
+                  thickness: 1.0, // Ajusta el grosor de la línea
+                  height: 20.0, // Espacio vertical alrededor del Divider
+                ),
+                FutureBuilder<List<String>>(
+                  future: juntas, // Tu Future<List<String>>
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator(); // Mostrar un indicador de carga mientras se resuelve
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          "Error: ${snapshot.error}"); // Mostrar un mensaje de error
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Text(
+                          "No hay juntas disponibles"); // Mostrar un mensaje cuando no haya datos
+                    }
+
+                    // Cuando los datos estén listos, construye el DropdownFormField
+                    return DropdownFormField(
+                      label: 'Seleccione una junta:',
+                      items: snapshot.data!, // Usar los datos resueltos
+                      value: _selectedOption,
+                      onChanged: (value) {
+                        _selectedOption = value;
+                        setState(() {
+                          
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, seleccione una opción.';
+                        }
+                        return null;
+                      },
+                    );
+                  },
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: NumericFormField(
+                        controller: _numberTotalVotesController,
+                        label: 'Totales:',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, ingrese un número.';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: NumericFormField(
+                        controller: _numberValidVotesController,
+                        label: 'Válidos:',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, ingrese un número.';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: NumericFormField(
+                        controller: _numberBlankVotesController,
+                        label: 'Blancos:',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, ingrese un número.';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: NumericFormField(
+                        controller: _numberNullVotesController,
+                        label: 'Nulos:',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, ingrese un número.';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                ListView.builder(
+                  shrinkWrap:
+                      true, // Esto le dice al ListView que no ocupe todo el espacio disponible
+                  physics:
+                      const NeverScrollableScrollPhysics(), // Evita que el ListView intente hacer scroll dentro de SingleChildScrollView
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: TextLabelFormField(
+                            controller: controllersFirstField[
+                                index], // Cambiado para usar un controlador diferente por cada elemento
+                            label: 'Candidato:',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Este campo no puede estar vacío.';
+                              }
+                              return null;
+                            },
+                            isReadOnly: true,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          flex: 1,
+                          child: NumericFormField(
+                            controller: controllersSecondField[
+                                index], // Cambiado para usar un controlador diferente por cada elemento
+                            label: 'Votos:',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor, ingrese un número.';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _isPresidentChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isPresidentChecked = value!;
+                        });
+                      },
+                    ),
+                    Text(
+                      'Firmó Presidente de la JRV.',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _isSecretaryChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isSecretaryChecked = value!;
+                        });
+                      },
+                    ),
+                    Text(
+                      'Firmó Secretaría de la JRV.',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _isDelegatedChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isDelegatedChecked = value!;
+                        });
+                      },
+                    ),
+                    Text(
+                      'Firmaron TODOS los Delegados de la JRV.',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: _submitForm,
+                    child: const Text('Guardar Datos y Enviar'),
+                  ),
+                )
+              ]),
+        ),
       ),
-    ),
     );
   }
 }
