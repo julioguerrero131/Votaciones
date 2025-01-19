@@ -5,6 +5,7 @@ import 'package:votaciones_movil/components/numeric_form_field.dart';
 import 'package:votaciones_movil/components/dropdown_form_field.dart';
 import 'package:votaciones_movil/components/text_label%20_form_field.dart';
 import 'package:votaciones_movil/components/show_alert_dialog.dart';
+import 'package:votaciones_movil/models/juntas_data.dart';
 import 'package:votaciones_movil/providers/juntas_provider.dart';
 import 'package:votaciones_movil/providers/user_provider.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
@@ -29,6 +30,9 @@ class _ReportPageState extends State<ReportPage> {
   final _numberValidVotesController = TextEditingController();
   final _numberBlankVotesController = TextEditingController();
   final _numberNullVotesController = TextEditingController();
+  
+  List<String> juntasStr = [];
+  List<JuntaData> juntas = [];
 
   List<String> items = [
     'ADN - Daniel Noboa',
@@ -132,9 +136,11 @@ class _ReportPageState extends State<ReportPage> {
       title: 'Envío Correcto.',
       message: 'Los datos han sido revisados y enviados.',
     );
-    // Aquí puedes agregar la lógica de envío de datos
     _submitNumericAttempt = 0;
     _submitCheckboxAttempt = 0;
+
+    // Aquí puedes agregar la lógica de envío de datos
+    
   }
 
   @override
@@ -162,7 +168,6 @@ class _ReportPageState extends State<ReportPage> {
     final user = context.watch<UserProvider>().user;
     final userProvider = Provider.of<UserProvider>(context);
     final juntaProvider = Provider.of<JuntaProvider>(context);
-    final juntas = reporteBloc.obtenerNombresDeJuntasPorUsuario(user!.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -205,37 +210,21 @@ class _ReportPageState extends State<ReportPage> {
                   thickness: 1.0, // Ajusta el grosor de la línea
                   height: 20.0, // Espacio vertical alrededor del Divider
                 ),
-                FutureBuilder<List<String>>(
-                  future: juntas, // Tu Future<List<String>>
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator(); // Mostrar un indicador de carga mientras se resuelve
-                    } else if (snapshot.hasError) {
-                      return Text(
-                          "Error: ${snapshot.error}"); // Mostrar un mensaje de error
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Text(
-                          "No hay juntas disponibles"); // Mostrar un mensaje cuando no haya datos
+                DropdownFormField(
+                  label: 'Seleccione una junta:',
+                  items: juntasStr,
+                  value: _selectedOption,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedOption = value;
+                    });
+                    juntaProvider.setJunta(juntas.firstWhere((junta) => junta.nombre == value));
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, seleccione una opción.';
                     }
-
-                    // Cuando los datos estén listos, construye el DropdownFormField
-                    return DropdownFormField(
-                      label: 'Seleccione una junta:',
-                      items: snapshot.data!, // Usar los datos resueltos
-                      value: _selectedOption,
-                      onChanged: (value) {
-                        _selectedOption = value;
-                        setState(() {
-                          
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, seleccione una opción.';
-                        }
-                        return null;
-                      },
-                    );
+                    return null;
                   },
                 ),
                 Row(

@@ -9,6 +9,7 @@ class ApiService {
 
   ApiService(this.baseUrl);
 
+  // Usuarios
   Future<List<UserData>> fetchUsers() async {
     final response = await http.get(Uri.parse('$baseUrl/usuarios'));
 
@@ -20,6 +21,18 @@ class ApiService {
     }
   }
 
+  Future<List<UserData>> fetchUserById(String userId) async {
+    final response = await http.get(Uri.parse('$baseUrl/usuarios/$userId'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => UserData.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to fetch users');
+    }
+  }
+
+  // Juntas
   Future<List<JuntaData>> fetchJuntas() async {
     final response = await http.get(
         Uri.parse('$baseUrl/juntas'));
@@ -39,17 +52,6 @@ class ApiService {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => UsuarioJuntaData.fromJson(json)).toList();
-    } else {
-      throw Exception('Failed to fetch users');
-    }
-  }
-
-  Future<List<UserData>> fetchUserById(String userId) async {
-    final response = await http.get(Uri.parse('$baseUrl/usuarios/$userId'));
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      return data.map((json) => UserData.fromJson(json)).toList();
     } else {
       throw Exception('Failed to fetch users');
     }
@@ -75,5 +77,5 @@ class ApiService {
     } else {
       throw Exception('Failed to fetch users');
     }
-  }
+  } 
 }
