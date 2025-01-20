@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:votaciones_movil/models/juntas.dart';
 
 class DropdownFormField extends StatelessWidget {
   final String label;
-  final List<String> items;
+  final List<JuntaData> items;
   final String? value;
   final void Function(String?)? onChanged;
   final String? Function(String?)? validator;
@@ -11,6 +12,7 @@ class DropdownFormField extends StatelessWidget {
     super.key,
     required this.label,
     required this.items,
+
     this.value,
     this.onChanged,
     this.validator,
@@ -35,11 +37,11 @@ class DropdownFormField extends StatelessWidget {
             filled: true,
             fillColor: Color(0xFFffffff),
           ),
-          items: items.map((String item) {
+          items: items.map((JuntaData item) {
             return DropdownMenuItem<String>(
-              value: item,
+              value: item.nombre,
               child: Text(
-                item,
+                item.nombre,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             );

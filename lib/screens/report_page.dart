@@ -23,18 +23,15 @@ class _ReportPageState extends State<ReportPage> {
   final _reportKey = GlobalKey<FormState>();
   final ReporteBloc reporteBloc = ReporteBloc(
       ApiService('https://sistema-electoral-cc1y.onrender.com/api'));
-      //https://api-observacion-electoral.frative.com/api
-      //https://sistema-electoral-cc1y.onrender.com/api
+  //https://api-observacion-electoral.frative.com/api
+  //https://sistema-electoral-cc1y.onrender.com/api
 
   final _numberTotalVotesController = TextEditingController();
   final _numberValidVotesController = TextEditingController();
   final _numberBlankVotesController = TextEditingController();
   final _numberNullVotesController = TextEditingController();
-  
-  List<String> juntasStr = [];
-  List<JuntaData> juntas = [];
 
-  List<String> items = [
+  List<String> candidatos = [
     'ADN - Daniel Noboa',
     'RC - Luisa Gonzlez',
     'PSC - Henry Kronfle'
@@ -140,7 +137,6 @@ class _ReportPageState extends State<ReportPage> {
     _submitCheckboxAttempt = 0;
 
     // Aquí puedes agregar la lógica de envío de datos
-    
   }
 
   @override
@@ -148,9 +144,9 @@ class _ReportPageState extends State<ReportPage> {
     super.initState();
     // Inicializamos dos controladores para cada elemento en la lista
     controllersFirstField = List.generate(
-        items.length, (index) => TextEditingController(text: items[index]));
+        candidatos.length, (index) => TextEditingController(text: candidatos[index]));
     controllersSecondField =
-        List.generate(items.length, (index) => TextEditingController());
+        List.generate(candidatos.length, (index) => TextEditingController());
   }
 
   @override
@@ -168,6 +164,8 @@ class _ReportPageState extends State<ReportPage> {
     final user = context.watch<UserProvider>().user;
     final userProvider = Provider.of<UserProvider>(context);
     final juntaProvider = Provider.of<JuntaProvider>(context);
+
+    Future<List<JuntaData>> juntas = reporteBloc.obtenerJuntasPorUsuario(user!.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -210,21 +208,37 @@ class _ReportPageState extends State<ReportPage> {
                   thickness: 1.0, // Ajusta el grosor de la línea
                   height: 20.0, // Espacio vertical alrededor del Divider
                 ),
-                DropdownFormField(
-                  label: 'Seleccione una junta:',
-                  items: juntasStr,
-                  value: _selectedOption,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedOption = value;
-                    });
-                    juntaProvider.setJunta(juntas.firstWhere((junta) => junta.nombre == value));
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, seleccione una opción.';
+                FutureBuilder<List<JuntaData>>(
+                  future: juntas, // Tu Future<List<String>>
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator(); // Mostrar un indicador de carga mientras se resuelve
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          "Error: ${snapshot.error}"); // Mostrar un mensaje de error
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Text(
+                          "No hay juntas disponibles"); // Mostrar un mensaje cuando no haya datos
                     }
-                    return null;
+                    // Cuando los datos estén listos, construye el DropdownFormField
+                    return DropdownFormField(
+                      label: 'Seleccione una junta:',
+                      items: snapshot.data!, // Usar los datos resueltos
+                      value: _selectedOption,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedOption = value;
+                          JuntaData juntaEscogida = snapshot.data!.firstWhere((junta) => junta.nombre == value);
+                          juntaProvider.setJunta(juntaEscogida);
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, seleccione una opción.';
+                        }
+                        return null;
+                      },
+                    );
                   },
                 ),
                 Row(
@@ -287,7 +301,7 @@ class _ReportPageState extends State<ReportPage> {
                       true, // Esto le dice al ListView que no ocupe todo el espacio disponible
                   physics:
                       const NeverScrollableScrollPhysics(), // Evita que el ListView intente hacer scroll dentro de SingleChildScrollView
-                  itemCount: items.length,
+                  itemCount: candidatos.length,
                   itemBuilder: (context, index) {
                     return Row(
                       children: [

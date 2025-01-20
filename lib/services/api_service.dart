@@ -28,7 +28,7 @@ class ApiService {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => UserData.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to fetch users');
+      throw Exception('Failed to fetch user by id');
     }
   }
 
@@ -41,7 +41,7 @@ class ApiService {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => JuntaData.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to fetch users');
+      throw Exception('Failed to fetch juntas');
     }
   }
 
@@ -53,7 +53,7 @@ class ApiService {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => UsuarioJuntaData.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to fetch users');
+      throw Exception('Failed to fetch juntas-usuario');
     }
   }
 
@@ -64,7 +64,7 @@ class ApiService {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => JuntaData.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to fetch users');
+      throw Exception('Failed to fetch juntas por id');
     }
   }
 
@@ -75,19 +75,21 @@ class ApiService {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => JuntaData.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to fetch users');
+      throw Exception('Failed to fetch juntas por usuario');
     }
   } 
 
   // dignidades
-  // Future<List<UserData>> fetchUsers() async {
-  //   final response = await http.get(Uri.parse('$baseUrl/usuarios'));
+  Future<List<UserData>> fetchProcesoDignidades() async {
+    final response = await http.get(Uri.parse('$baseUrl/procesos-dignidad'));
 
-  //   if (response.statusCode == 200) {
-  //     final List<dynamic> data = json.decode(response.body);
-  //     return data.map((json) => UserData.fromJson(json)).toList();
-  //   } else {
-  //     throw Exception('Failed to fetch users');
-  //   }
-  // }
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => UserData.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to fetch procesos-dignidad');
+    }
+  }
+
+
 }

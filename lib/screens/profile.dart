@@ -42,7 +42,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     final idNumberController = TextEditingController(text: user?.cedula);
     final namesController = TextEditingController(text: user?.nombres);
     final lastNamesController = TextEditingController(text: user?.apellidos);
-    String? genderSelectedOption = user?.genero;
+    final genderController = TextEditingController(text: user?.genero);
     final homeAddressController = TextEditingController(text: user?.direccion);
     final firstNumberController = TextEditingController(text: user?.telefono);
     final auxiliarNumberController = TextEditingController(text: user?.telefonoAux);
@@ -112,21 +112,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               },
               isReadOnly: true
             ),
-            DropdownFormField(
-              label: 'Género:', 
-              items: const ['Masculino', 'Femenino', 'Otro', 'Prefiero no decirlo'],
-              value: genderSelectedOption,
-              onChanged: (value) {
-                  setState(() {
-                    genderSelectedOption = value;
-                  });
-                },
-                validator: (value) {
+            TextLabelFormField(
+              controller: genderController,
+              label: "Genero:",
+              validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, seleccione una opción';
                   }
                   return null;
-                },
+              },
+              isReadOnly: true
             ),
             TextLabelFormField(
               controller: homeAddressController,
