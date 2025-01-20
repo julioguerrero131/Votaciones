@@ -1,4 +1,4 @@
-import 'package:votaciones_movil/models/users_data.dart';
+import 'package:votaciones_movil/models/users.dart';
 import 'package:votaciones_movil/services/api_service.dart';
 
 class LoginBloc {

@@ -5,7 +5,7 @@ import 'package:votaciones_movil/components/numeric_form_field.dart';
 import 'package:votaciones_movil/components/dropdown_form_field.dart';
 import 'package:votaciones_movil/components/text_label%20_form_field.dart';
 import 'package:votaciones_movil/components/show_alert_dialog.dart';
-import 'package:votaciones_movil/models/juntas_data.dart';
+import 'package:votaciones_movil/models/juntas.dart';
 import 'package:votaciones_movil/providers/juntas_provider.dart';
 import 'package:votaciones_movil/providers/user_provider.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';

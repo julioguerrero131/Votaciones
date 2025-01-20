@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:votaciones_movil/models/juntas_data.dart';
-import 'package:votaciones_movil/models/users_data.dart';
-import 'package:votaciones_movil/models/users_juntas_data.dart';
+import 'package:votaciones_movil/models/juntas.dart';
+import 'package:votaciones_movil/models/users.dart';
+import 'package:votaciones_movil/models/users_juntas.dart';
 
 class ApiService {
   final String baseUrl;
@@ -78,4 +78,16 @@ class ApiService {
       throw Exception('Failed to fetch users');
     }
   } 
+
+  // dignidades
+  // Future<List<UserData>> fetchUsers() async {
+  //   final response = await http.get(Uri.parse('$baseUrl/usuarios'));
+
+  //   if (response.statusCode == 200) {
+  //     final List<dynamic> data = json.decode(response.body);
+  //     return data.map((json) => UserData.fromJson(json)).toList();
+  //   } else {
+  //     throw Exception('Failed to fetch users');
+  //   }
+  // }
 }

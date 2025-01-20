@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:votaciones_movil/models/juntas_data.dart';
+import 'package:votaciones_movil/models/juntas.dart';
 
 class JuntaProvider with ChangeNotifier {
   JuntaData? _junta;

@@ -10,7 +10,7 @@ void main() => runApp(
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => JuntaProvider()),
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ),
 );
 

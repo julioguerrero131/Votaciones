@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:votaciones_movil/models/users_data.dart';
+import 'package:votaciones_movil/models/users.dart';
 
 class UserProvider with ChangeNotifier {
   UserData? _user;

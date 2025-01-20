@@ -1,4 +1,4 @@
-import 'package:votaciones_movil/models/juntas_data.dart';
+import 'package:votaciones_movil/models/juntas.dart';
 import 'package:votaciones_movil/services/api_service.dart';
 
 class ReporteBloc {
