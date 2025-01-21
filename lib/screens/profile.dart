@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:votaciones_movil/components/dropdown_form_field.dart';
 import 'package:votaciones_movil/components/image_viewer.dart';
 import 'package:votaciones_movil/components/numeric_form_field.dart';
 import 'dart:io';

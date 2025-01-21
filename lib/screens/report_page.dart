@@ -10,7 +10,6 @@ import 'package:votaciones_movil/providers/juntas_provider.dart';
 import 'package:votaciones_movil/providers/user_provider.dart';
 import 'package:votaciones_movil/routes/app_routes.dart';
 import 'package:votaciones_movil/services/api_service.dart';
-import 'package:votaciones_movil/providers/user_provider.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});

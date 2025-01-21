@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:votaciones_movil/models/juntas.dart';
+import 'package:votaciones_movil/models/proceso_electoral.dart';
 import 'package:votaciones_movil/models/users.dart';
 import 'package:votaciones_movil/models/users_juntas.dart';
 
@@ -78,6 +79,18 @@ class ApiService {
       throw Exception('Failed to fetch juntas por usuario');
     }
   } 
+
+  // procesos electorales
+  Future<List<ProcesoElectoralData>> fetchProcesosElectoralesVigentes() async {
+    final response = await http.get(Uri.parse('$baseUrl/procesos-electorales/solo/vigentes'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => ProcesoElectoralData.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to fetch procesos-dignidad');
+    }
+  }
 
   // dignidades
   Future<List<UserData>> fetchProcesoDignidades() async {
